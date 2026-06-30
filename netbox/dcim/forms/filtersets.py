@@ -19,7 +19,13 @@ from tenancy.forms import ContactModelFilterForm, TenancyFilterForm
 from tenancy.models import Tenant
 from users.models import User
 from utilities.forms import BOOLEAN_WITH_BLANK_CHOICES, FilterForm, add_blank_choice
-from utilities.forms.fields import ColorField, DynamicModelMultipleChoiceField, PositiveBigIntegerField, TagFilterField
+from utilities.forms.fields import (
+    ColorField,
+    DynamicModelChoiceField,
+    DynamicModelMultipleChoiceField,
+    PositiveBigIntegerField,
+    TagFilterField,
+)
 from utilities.forms.rendering import FieldSet
 from utilities.forms.widgets import NumberWithOptions
 from virtualization.models import Cluster, ClusterGroup, VirtualMachine
@@ -1539,7 +1545,7 @@ class CoolingFeedFilterForm(TenancyFilterForm, PrimaryModelFilterSetForm):
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet('region_id', 'site_group_id', 'site_id', 'cooling_source_id', 'rack_id', name=_('Location')),
-        FieldSet('status', 'type', 'fluid_type', name=_('Attributes')),
+        FieldSet('status', 'flow_direction', 'fluid_type', name=_('Attributes')),
         FieldSet(
             'cooling_capacity', 'flow_rate', 'flow_rate_unit', 'pressure', 'pressure_unit', 'supply_temperature',
             'return_temperature', 'temperature_unit', name=_('Characteristics')
@@ -1588,9 +1594,9 @@ class CoolingFeedFilterForm(TenancyFilterForm, PrimaryModelFilterSetForm):
         choices=CoolingFeedStatusChoices,
         required=False
     )
-    type = forms.ChoiceField(
-        label=_('Type'),
-        choices=add_blank_choice(CoolingFeedTypeChoices),
+    flow_direction = forms.ChoiceField(
+        label=_('Flow direction'),
+        choices=add_blank_choice(CoolingFlowDirectionChoices),
         required=False
     )
     fluid_type = forms.ChoiceField(
@@ -1843,29 +1849,28 @@ class PowerOutletTemplateFilterForm(ModularDeviceComponentTemplateFilterForm):
     )
 
 
-class CoolingPortFilterForm(PathEndpointFilterForm, DeviceComponentFilterForm):
+class CoolingPortFilterForm(DeviceComponentFilterForm):
     model = CoolingPort
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet(
-            'name', 'label', 'type', 'connector_type', 'diameter', 'diameter_unit', 'maximum_flow_unit',
-            name=_('Attributes')
+            'name', 'label', 'flow_direction', 'type', 'diameter', 'diameter_unit', 'maximum_flow_unit',
+            'cooling_outlet', 'cooling_feed', name=_('Attributes')
         ),
         FieldSet('region_id', 'site_group_id', 'site_id', 'location_id', 'rack_id', name=_('Location')),
         FieldSet(
             'tenant_id', 'device_type_id', 'device_role_id', 'device_id', 'device_status', 'virtual_chassis_id',
             name=_('Device')
         ),
-        FieldSet('cabled', 'connected', 'occupied', name=_('Connection')),
         FieldSet('owner_group_id', 'owner_id', name=_('Ownership')),
+    )
+    flow_direction = forms.MultipleChoiceField(
+        label=_('Flow direction'),
+        choices=CoolingFlowDirectionChoices,
+        required=False
     )
     type = forms.MultipleChoiceField(
         label=_('Type'),
-        choices=CoolingFeedTypeChoices,
-        required=False
-    )
-    connector_type = forms.MultipleChoiceField(
-        label=_('Connector type'),
         choices=CoolingConnectorTypeChoices,
         required=False
     )
@@ -1881,6 +1886,16 @@ class CoolingPortFilterForm(PathEndpointFilterForm, DeviceComponentFilterForm):
     maximum_flow_unit = forms.MultipleChoiceField(
         label=_('Maximum flow unit'),
         choices=FlowRateUnitChoices,
+        required=False
+    )
+    cooling_outlet = DynamicModelChoiceField(
+        label=_('Cooling outlet'),
+        queryset=CoolingOutlet.objects.all(),
+        required=False
+    )
+    cooling_feed = DynamicModelChoiceField(
+        label=_('Cooling feed'),
+        queryset=CoolingFeed.objects.all(),
         required=False
     )
     tag = TagFilterField(model)
@@ -1891,18 +1906,18 @@ class CoolingPortTemplateFilterForm(ModularDeviceComponentTemplateFilterForm):
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet(
-            'name', 'label', 'type', 'connector_type', 'diameter', 'diameter_unit', 'maximum_flow_unit',
+            'name', 'label', 'flow_direction', 'type', 'diameter', 'diameter_unit', 'maximum_flow_unit',
             name=_('Attributes')
         ),
         FieldSet('device_type_id', 'module_type_id', name=_('Device')),
     )
-    type = forms.MultipleChoiceField(
-        label=_('Type'),
-        choices=CoolingFeedTypeChoices,
+    flow_direction = forms.MultipleChoiceField(
+        label=_('Flow direction'),
+        choices=CoolingFlowDirectionChoices,
         required=False
     )
-    connector_type = forms.MultipleChoiceField(
-        label=_('Connector type'),
+    type = forms.MultipleChoiceField(
+        label=_('Type'),
         choices=CoolingConnectorTypeChoices,
         required=False
     )
@@ -1922,28 +1937,27 @@ class CoolingPortTemplateFilterForm(ModularDeviceComponentTemplateFilterForm):
     )
 
 
-class CoolingOutletFilterForm(PathEndpointFilterForm, DeviceComponentFilterForm):
+class CoolingOutletFilterForm(DeviceComponentFilterForm):
     model = CoolingOutlet
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
         FieldSet(
-            'name', 'label', 'type', 'connector_type', 'diameter', 'diameter_unit', 'color', name=_('Attributes')
+            'name', 'label', 'flow_direction', 'type', 'diameter', 'diameter_unit', 'color', name=_('Attributes')
         ),
         FieldSet('region_id', 'site_group_id', 'site_id', 'location_id', 'rack_id', name=_('Location')),
         FieldSet(
             'tenant_id', 'device_type_id', 'device_role_id', 'device_id', 'device_status', 'virtual_chassis_id',
             name=_('Device')
         ),
-        FieldSet('cabled', 'connected', 'occupied', name=_('Connection')),
         FieldSet('owner_group_id', 'owner_id', name=_('Ownership')),
+    )
+    flow_direction = forms.MultipleChoiceField(
+        label=_('Flow direction'),
+        choices=CoolingFlowDirectionChoices,
+        required=False
     )
     type = forms.MultipleChoiceField(
         label=_('Type'),
-        choices=CoolingFeedTypeChoices,
-        required=False
-    )
-    connector_type = forms.MultipleChoiceField(
-        label=_('Connector type'),
         choices=CoolingConnectorTypeChoices,
         required=False
     )
@@ -1967,16 +1981,16 @@ class CoolingOutletTemplateFilterForm(ModularDeviceComponentTemplateFilterForm):
     model = CoolingOutletTemplate
     fieldsets = (
         FieldSet('q', 'filter_id', 'tag'),
-        FieldSet('name', 'label', 'type', 'connector_type', 'diameter', 'diameter_unit', name=_('Attributes')),
+        FieldSet('name', 'label', 'flow_direction', 'type', 'diameter', 'diameter_unit', name=_('Attributes')),
         FieldSet('device_type_id', 'module_type_id', name=_('Device')),
+    )
+    flow_direction = forms.MultipleChoiceField(
+        label=_('Flow direction'),
+        choices=CoolingFlowDirectionChoices,
+        required=False
     )
     type = forms.MultipleChoiceField(
         label=_('Type'),
-        choices=CoolingFeedTypeChoices,
-        required=False
-    )
-    connector_type = forms.MultipleChoiceField(
-        label=_('Connector type'),
         choices=CoolingConnectorTypeChoices,
         required=False
     )

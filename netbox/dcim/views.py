@@ -2906,7 +2906,7 @@ class DeviceCoolingPortsView(DeviceComponentsView):
     table = tables.DeviceCoolingPortTable
     filterset = filtersets.CoolingPortFilterSet
     filterset_form = forms.CoolingPortFilterForm
-    actions = (EditObject, DeleteObject, BulkEdit, BulkRename, BulkDisconnect, BulkDelete)
+    actions = (EditObject, DeleteObject, BulkEdit, BulkRename, BulkDelete)
     tab = ViewTab(
         label=_('Cooling Ports'),
         badge=lambda obj: obj.cooling_port_count,
@@ -2922,7 +2922,7 @@ class DeviceCoolingOutletsView(DeviceComponentsView):
     table = tables.DeviceCoolingOutletTable
     filterset = filtersets.CoolingOutletFilterSet
     filterset_form = forms.CoolingOutletFilterForm
-    actions = (EditObject, DeleteObject, BulkEdit, BulkRename, BulkDisconnect, BulkDelete)
+    actions = (EditObject, DeleteObject, BulkEdit, BulkRename, BulkDelete)
     tab = ViewTab(
         label=_('Cooling Outlets'),
         badge=lambda obj: obj.cooling_outlet_count,
@@ -3578,13 +3578,6 @@ class CoolingPortView(generic.ObjectView):
             TagsPanel(),
         ],
         right_panels=[
-            panels.ConnectionPanel(
-                trace_url_name='dcim:coolingport_trace',
-                connect_options=[
-                    {'a_type': 'dcim.coolingport', 'b_type': 'dcim.coolingoutlet', 'label': _('Cooling Outlet')},
-                    {'a_type': 'dcim.coolingport', 'b_type': 'dcim.coolingfeed', 'label': _('Cooling Feed')},
-                ],
-            ),
             panels.InventoryItemsPanel(),
         ],
     )
@@ -3629,20 +3622,11 @@ class CoolingPortBulkRenameView(generic.BulkRenameView):
     rename_fields = ('name', 'label')
 
 
-@register_model_view(CoolingPort, 'bulk_disconnect', path='disconnect', detail=False)
-class CoolingPortBulkDisconnectView(BulkDisconnectView):
-    queryset = CoolingPort.objects.all()
-
-
 @register_model_view(CoolingPort, 'bulk_delete', path='delete', detail=False)
 class CoolingPortBulkDeleteView(generic.BulkDeleteView):
     queryset = CoolingPort.objects.all()
     filterset = filtersets.CoolingPortFilterSet
     table = tables.CoolingPortTable
-
-
-# Trace view
-register_model_view(CoolingPort, 'trace', kwargs={'model': CoolingPort})(PathTraceView)
 
 
 #
@@ -3667,12 +3651,6 @@ class CoolingOutletView(generic.ObjectView):
             TagsPanel(),
         ],
         right_panels=[
-            panels.ConnectionPanel(
-                trace_url_name='dcim:coolingoutlet_trace',
-                connect_options=[
-                    {'a_type': 'dcim.coolingoutlet', 'b_type': 'dcim.coolingport', 'label': _('Cooling Port')},
-                ],
-            ),
             panels.InventoryItemsPanel(),
         ],
     )
@@ -3717,20 +3695,11 @@ class CoolingOutletBulkRenameView(generic.BulkRenameView):
     rename_fields = ('name', 'label')
 
 
-@register_model_view(CoolingOutlet, 'bulk_disconnect', path='disconnect', detail=False)
-class CoolingOutletBulkDisconnectView(BulkDisconnectView):
-    queryset = CoolingOutlet.objects.all()
-
-
 @register_model_view(CoolingOutlet, 'bulk_delete', path='delete', detail=False)
 class CoolingOutletBulkDeleteView(generic.BulkDeleteView):
     queryset = CoolingOutlet.objects.all()
     filterset = filtersets.CoolingOutletFilterSet
     table = tables.CoolingOutletTable
-
-
-# Trace view
-register_model_view(CoolingOutlet, 'trace', kwargs={'model': CoolingOutlet})(PathTraceView)
 
 
 #
@@ -5389,12 +5358,6 @@ class CoolingFeedView(generic.ObjectView):
             TagsPanel(),
         ],
         right_panels=[
-            panels.ConnectionPanel(
-                trace_url_name='dcim:coolingfeed_trace',
-                connect_options=[
-                    {'a_type': 'dcim.coolingfeed', 'b_type': 'dcim.coolingport', 'label': _('Cooling Port')},
-                ],
-            ),
             CommentsPanel(),
         ],
     )
@@ -5432,20 +5395,11 @@ class CoolingFeedBulkRenameView(generic.BulkRenameView):
     filterset = filtersets.CoolingFeedFilterSet
 
 
-@register_model_view(CoolingFeed, 'bulk_disconnect', path='disconnect', detail=False)
-class CoolingFeedBulkDisconnectView(BulkDisconnectView):
-    queryset = CoolingFeed.objects.all()
-
-
 @register_model_view(CoolingFeed, 'bulk_delete', path='delete', detail=False)
 class CoolingFeedBulkDeleteView(generic.BulkDeleteView):
     queryset = CoolingFeed.objects.all()
     filterset = filtersets.CoolingFeedFilterSet
     table = tables.CoolingFeedTable
-
-
-# Trace view
-register_model_view(CoolingFeed, 'trace', kwargs={'model': CoolingFeed})(PathTraceView)
 
 
 #
