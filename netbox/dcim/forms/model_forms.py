@@ -1392,6 +1392,15 @@ class InterfaceTemplateForm(ModularComponentTemplateForm):
         choices=add_blank_choice(WirelessRoleChoices),
         required=False,
     )
+    parent = DynamicModelChoiceField(
+        label=_('Parent'),
+        queryset=InterfaceTemplate.objects.all(),
+        required=False,
+        query_params={
+            'device_type_id': '$device_type',
+            'module_type_id': '$module_type',
+        }
+    )
     bridge = DynamicModelChoiceField(
         label=_('Bridge'),
         queryset=InterfaceTemplate.objects.all(),
@@ -1408,7 +1417,8 @@ class InterfaceTemplateForm(ModularComponentTemplateForm):
                 FieldSet('device_type', name=_('Device Type')),
                 FieldSet('module_type', name=_('Module Type')),
             ),
-            'name', 'label', 'type', 'enabled', 'mgmt_only', 'description', 'bridge',
+            'name', 'label', 'type', 'channels', 'channel_id', 'enabled', 'mgmt_only', 'description', 'parent',
+            'bridge',
         ),
         FieldSet('poe_mode', 'poe_type', name=_('PoE')),
         FieldSet('rf_role', name=_('Wireless')),
@@ -1417,8 +1427,8 @@ class InterfaceTemplateForm(ModularComponentTemplateForm):
     class Meta:
         model = InterfaceTemplate
         fields = [
-            'device_type', 'module_type', 'name', 'label', 'type', 'mgmt_only', 'enabled', 'description', 'poe_mode',
-            'poe_type', 'bridge', 'rf_role',
+            'device_type', 'module_type', 'name', 'label', 'type', 'channels', 'channel_id', 'mgmt_only', 'enabled',
+            'description', 'poe_mode', 'poe_type', 'parent', 'bridge', 'rf_role',
         ]
 
 
@@ -1940,11 +1950,12 @@ class InterfaceForm(InterfaceCommonForm, ModularDeviceComponentForm):
 
     fieldsets = (
         FieldSet(
-            'device', 'module', 'name', 'label', 'type', 'speed', 'duplex', 'description', 'tags', name=_('Interface')
+            'device', 'module', 'name', 'label', 'type', 'channels', 'speed', 'duplex', 'description', 'tags',
+            name=_('Interface')
         ),
         FieldSet('vrf', 'mac_address', 'wwn', name=_('Addressing')),
         FieldSet('vdcs', 'mtu', 'tx_power', 'enabled', 'mgmt_only', 'mark_connected', name=_('Operation')),
-        FieldSet('parent', 'bridge', 'lag', name=_('Related Interfaces')),
+        FieldSet('parent', 'channel_id', 'bridge', 'lag', name=_('Related Interfaces')),
         FieldSet('poe_mode', 'poe_type', name=_('PoE')),
         FieldSet(
             'mode', 'vlan_group', 'untagged_vlan', 'tagged_vlans', 'qinq_svlan', 'vlan_translation_policy',
@@ -1960,11 +1971,11 @@ class InterfaceForm(InterfaceCommonForm, ModularDeviceComponentForm):
     class Meta:
         model = Interface
         fields = [
-            'device', 'module', 'vdcs', 'name', 'label', 'type', 'speed', 'duplex', 'enabled', 'parent', 'bridge',
-            'lag', 'wwn', 'mtu', 'mgmt_only', 'mark_connected', 'description', 'poe_mode', 'poe_type', 'mode',
-            'rf_role', 'rf_channel', 'rf_channel_frequency', 'rf_channel_width', 'tx_power', 'wireless_lans',
-            'untagged_vlan', 'tagged_vlans', 'qinq_svlan', 'vlan_translation_policy', 'vrf',
-            'owner', 'tags',
+            'device', 'module', 'vdcs', 'name', 'label', 'type', 'channels', 'channel_id', 'speed', 'duplex',
+            'enabled', 'parent', 'bridge', 'lag', 'wwn', 'mtu', 'mgmt_only', 'mark_connected', 'description',
+            'poe_mode', 'poe_type', 'mode', 'rf_role', 'rf_channel', 'rf_channel_frequency', 'rf_channel_width',
+            'tx_power', 'wireless_lans', 'untagged_vlan', 'tagged_vlans', 'qinq_svlan', 'vlan_translation_policy',
+            'vrf', 'owner', 'tags',
         ]
         widgets = {
             'speed': NumberWithOptions(
