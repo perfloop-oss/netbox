@@ -794,7 +794,7 @@ class PowerPortTemplateType(ModularComponentTemplateType):
 
 @strawberry_django.type(
     models.CoolingFeed,
-    exclude=['_path', '_abs_flow_rate', '_abs_pressure', '_abs_supply_temperature', '_abs_return_temperature'],
+    exclude=['_path', '_abs_rated_flow_rate', '_abs_supply_temperature', '_abs_return_temperature'],
     filters=CoolingFeedFilter,
     pagination=True
 )
