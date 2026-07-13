@@ -175,8 +175,8 @@ class CustomFieldFilterSet(OwnerFilterMixin, ChangeLoggedModelFilterSet):
         model = CustomField
         fields = (
             'id', 'name', 'label', 'group_name', 'required', 'unique', 'search_weight', 'filter_logic', 'ui_visible',
-            'ui_editable', 'weight', 'is_cloneable', 'description', 'validation_minimum', 'validation_maximum',
-            'validation_regex',
+            'ui_editable', 'weight', 'is_cloneable', 'nulls_first', 'description', 'validation_minimum',
+            'validation_maximum', 'validation_regex',
         )
 
     def search(self, queryset, name, value):
@@ -506,7 +506,9 @@ class ImageAttachmentFilterSet(ChangeLoggedModelFilterSet):
 
     class Meta:
         model = ImageAttachment
-        fields = ('id', 'object_type_id', 'object_id', 'name', 'description', 'image_width', 'image_height')
+        fields = (
+            'id', 'object_type_id', 'object_id', 'name', 'description', 'image_width', 'image_height', 'image_size',
+        )
 
     def search(self, queryset, name, value):
         if not value.strip():

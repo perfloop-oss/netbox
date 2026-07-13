@@ -56,8 +56,8 @@ class DeviceTypeSerializer(PrimaryModelSerializer):
         fields = [
             'id', 'url', 'display_url', 'display', 'manufacturer', 'default_platform', 'model', 'slug', 'part_number',
             'u_height', 'exclude_from_utilization', 'is_full_depth', 'subdevice_role', 'airflow', 'cooling_method',
-            'weight', 'weight_unit', 'front_image', 'rear_image', 'description', 'owner', 'comments', 'tags',
-            'custom_fields', 'created', 'last_updated', 'device_count', 'console_port_template_count',
+            'weight', 'weight_unit', 'end_of_life', 'front_image', 'rear_image', 'description', 'owner', 'comments',
+            'tags', 'custom_fields', 'created', 'last_updated', 'device_count', 'console_port_template_count',
             'console_server_port_template_count', 'power_port_template_count', 'power_outlet_template_count',
             'cooling_port_template_count', 'cooling_outlet_template_count', 'interface_template_count',
             'front_port_template_count', 'rear_port_template_count', 'device_bay_template_count',
@@ -120,8 +120,8 @@ class ModuleTypeSerializer(PrimaryModelSerializer):
         model = ModuleType
         fields = [
             'id', 'url', 'display_url', 'display', 'profile', 'manufacturer', 'model', 'part_number', 'airflow',
-            'cooling_method', 'weight', 'weight_unit', 'description', 'attributes', 'owner', 'comments', 'tags',
-            'custom_fields',
+            'cooling_method', 'weight', 'weight_unit', 'end_of_life', 'description', 'attributes', 'owner', 'comments',
+            'tags', 'custom_fields',
             'created', 'last_updated', 'module_count', 'console_port_template_count',
             'console_server_port_template_count', 'power_port_template_count', 'power_outlet_template_count',
             'interface_template_count', 'front_port_template_count', 'rear_port_template_count',

@@ -51,7 +51,8 @@ class CustomFieldTestCase(TestCase, ChangeLoggedFilterSetTests):
                 filter_logic=CustomFieldFilterLogicChoices.FILTER_EXACT,
                 ui_visible=CustomFieldUIVisibleChoices.IF_SET,
                 ui_editable=CustomFieldUIEditableChoices.NO,
-                description='foobar2'
+                description='foobar2',
+                nulls_first=False
             ),
             CustomField(
                 name='Custom Field 3',
@@ -61,7 +62,8 @@ class CustomFieldTestCase(TestCase, ChangeLoggedFilterSetTests):
                 filter_logic=CustomFieldFilterLogicChoices.FILTER_DISABLED,
                 ui_visible=CustomFieldUIVisibleChoices.HIDDEN,
                 ui_editable=CustomFieldUIEditableChoices.HIDDEN,
-                description='foobar3'
+                description='foobar3',
+                nulls_first=False
             ),
             CustomField(
                 name='Custom Field 4',
@@ -149,6 +151,12 @@ class CustomFieldTestCase(TestCase, ChangeLoggedFilterSetTests):
 
     def test_description(self):
         params = {'description': ['foobar1', 'foobar2']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_nulls_first(self):
+        params = {'nulls_first': True}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 4)
+        params = {'nulls_first': False}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
 
@@ -741,7 +749,8 @@ class ImageAttachmentTestCase(TestCase, ChangeLoggedFilterSetTests):
                 name='Image Attachment 1',
                 image='http://example.com/image1.png',
                 image_height=100,
-                image_width=100
+                image_width=100,
+                image_size=1024
             ),
             ImageAttachment(
                 object_type=site_ct,
@@ -749,7 +758,8 @@ class ImageAttachmentTestCase(TestCase, ChangeLoggedFilterSetTests):
                 name='Image Attachment 2',
                 image='http://example.com/image2.png',
                 image_height=100,
-                image_width=100
+                image_width=100,
+                image_size=2048
             ),
             ImageAttachment(
                 object_type=rack_ct,
@@ -757,7 +767,8 @@ class ImageAttachmentTestCase(TestCase, ChangeLoggedFilterSetTests):
                 name='Image Attachment 3',
                 image='http://example.com/image3.png',
                 image_height=100,
-                image_width=100
+                image_width=100,
+                image_size=4096
             ),
             ImageAttachment(
                 object_type=rack_ct,
@@ -765,7 +776,8 @@ class ImageAttachmentTestCase(TestCase, ChangeLoggedFilterSetTests):
                 name='Image Attachment 4',
                 image='http://example.com/image4.png',
                 image_height=100,
-                image_width=100
+                image_width=100,
+                image_size=8192
             )
         )
         ImageAttachment.objects.bulk_create(image_attachments)
@@ -788,6 +800,17 @@ class ImageAttachmentTestCase(TestCase, ChangeLoggedFilterSetTests):
             'object_id': [Site.objects.first().pk],
         }
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+
+    def test_image_size(self):
+        # Fixtures set image_size to 1024, 2048, 4096, 8192.
+        params = {'image_size': [1024, 2048]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_image_size_range(self):
+        # __gte/__lte bound the 1024/2048/4096/8192 fixtures to the middle two. NetBox's auto-generated numeric
+        # lookups are multi-value, so values are passed as lists.
+        params = {'image_size__gte': [2048], 'image_size__lte': [4096]}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
 
 
 class TableConfigTestCase(TestCase, ChangeLoggedFilterSetTests):

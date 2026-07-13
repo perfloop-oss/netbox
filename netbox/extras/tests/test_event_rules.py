@@ -109,6 +109,47 @@ class EventRuleTestCase(RQQueueTestMixin, APITestCase):
             Tag(name='Baz', slug='baz'),
         ))
 
+    def test_eventrule_snapshot_changed_condition(self):
+        """
+        An event rule using the 'changed' operator fires only when the attribute
+        transitions to the target value, not on subsequent updates that leave it
+        unchanged.  Exercises the full process_event_rules() path.
+        """
+        webhook = Webhook.objects.get(name='Webhook 1')
+        webhook_type = ObjectType.objects.get_for_model(Webhook)
+        site_type = ObjectType.objects.get_for_model(Site)
+        event_rule = EventRule.objects.create(
+            name='Status Change Rule',
+            event_types=[OBJECT_UPDATED],
+            action_type=EventRuleActionChoices.WEBHOOK,
+            action_object_type=webhook_type,
+            action_object_id=webhook.pk,
+            conditions={
+                'and': [
+                    {'attr': 'status.value', 'value': SiteStatusChoices.STATUS_ACTIVE},
+                    {'attr': 'status', 'op': 'changed'},
+                ]
+            }
+        )
+        event_rule.object_types.set([site_type])
+
+        site = Site.objects.create(name='Site Snapshot', slug='site-snapshot', status=SiteStatusChoices.STATUS_PLANNED)
+        url = reverse('dcim-api:site-detail', kwargs={'pk': site.pk})
+        self.add_permissions('dcim.change_site')
+
+        # planned → active: the 'changed' condition is satisfied; rule must fire
+        response = self.client.patch(url, {'status': SiteStatusChoices.STATUS_ACTIVE}, format='json', **self.header)
+        self.assertHttpStatus(response, status.HTTP_200_OK)
+        rule_jobs = [j for j in self.queue.jobs if j.kwargs['event_rule'] == event_rule]
+        self.assertEqual(len(rule_jobs), 1, 'Expected rule to fire on status transition to active')
+        self.queue.empty()
+
+        # description update while status stays active: 'changed' condition fails; rule must not fire
+        response = self.client.patch(url, {'description': 'Updated'}, format='json', **self.header)
+        self.assertHttpStatus(response, status.HTTP_200_OK)
+        rule_jobs = [j for j in self.queue.jobs if j.kwargs['event_rule'] == event_rule]
+        self.assertEqual(len(rule_jobs), 0, 'Expected rule not to fire when status is unchanged')
+
     def test_eventrule_conditions(self):
         """
         Test evaluation of EventRule conditions.
@@ -396,8 +437,6 @@ class EventRuleTestCase(RQQueueTestMixin, APITestCase):
             self.assertEqual(body['event'], 'created')
             self.assertEqual(body['timestamp'], job.kwargs['timestamp'])
             self.assertEqual(body['object_type'], 'dcim.site')
-            self.assertEqual(body['username'], 'testuser')
-            self.assertEqual(body['request_id'], str(request_id))
             self.assertEqual(body['data']['name'], 'Site 1')
             self.assertEqual(body['data']['foo'], 1)
             self.assertEqual(body['context']['foo'], 123)  # From netbox.tests.dummy_plugin
@@ -431,13 +470,13 @@ class EventRuleTestCase(RQQueueTestMixin, APITestCase):
         with patch.object(Session, 'send', dummy_send):
             send_webhook(**job.kwargs)
 
-    def test_job_completed_webhook_username_fallback(self):
+    def test_job_completed_webhook_without_request(self):
         """
         Ensure job_end event processing can enqueue a webhook even when the EventContext
-        lacks legacy request attributes (e.g. `username`).
+        lacks a request context.
 
         The job_start/job_end signal receivers only populate `user` and `data`, so webhook
-        processing must derive the username from the user object (or tolerate it being unset).
+        processing must tolerate the absence of a request.
         """
         script_type = ObjectType.objects.get_for_model(Script)
         webhook_type = ObjectType.objects.get_for_model(Webhook)
@@ -459,7 +498,7 @@ class EventRuleTestCase(RQQueueTestMixin, APITestCase):
         self.assertEqual(job.kwargs['event_rule'], event_rule)
         self.assertEqual(job.kwargs['event_type'], JOB_COMPLETED)
         self.assertEqual(job.kwargs['object_type'], script_type)
-        self.assertEqual(job.kwargs['username'], self.user.username)
+        self.assertNotIn('request', job.kwargs)
 
     def test_duplicate_enqueue_refreshes_lazy_payload(self):
         """

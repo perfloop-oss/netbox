@@ -1,3 +1,5 @@
+from collections.abc import Iterable, Mapping
+
 import jsonschema
 import yaml
 from django.core.exceptions import ValidationError
@@ -96,6 +98,12 @@ class ModuleType(ImageAttachmentsMixin, PrimaryModel, WeightMixin):
         blank=True,
         null=True
     )
+    end_of_life = models.DateField(
+        verbose_name=_('end of life'),
+        blank=True,
+        null=True,
+        help_text=_('The date after which this module type is no longer supported by the manufacturer')
+    )
     attribute_data = models.JSONField(
         blank=True,
         null=True,
@@ -184,7 +192,10 @@ class ModuleType(ImageAttachmentsMixin, PrimaryModel, WeightMixin):
         attrs = {}
         for name, options in self.profile.schema.get('properties', {}).items():
             key = options.get('title', title(name))
-            attrs[key] = self.attribute_data.get(name)
+            value = self.attribute_data.get(name)
+            if isinstance(value, Iterable) and not isinstance(value, (str, bytes, Mapping)):
+                value = ', '.join(str(v) for v in value)
+            attrs[key] = value
         return dict(sorted(attrs.items()))
 
     def clean(self):
@@ -210,6 +221,7 @@ class ModuleType(ImageAttachmentsMixin, PrimaryModel, WeightMixin):
             'weight_unit': self.weight_unit,
             'airflow': self.airflow,
             'cooling_method': self.cooling_method,
+            'end_of_life': self.end_of_life.isoformat() if self.end_of_life else None,
             'attribute_data': self.attribute_data,
             'comments': self.comments,
         }

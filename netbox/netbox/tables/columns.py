@@ -6,7 +6,8 @@ import django_tables2 as tables
 from django.conf import settings
 from django.contrib.auth.context_processors import auth
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import DateField, DateTimeField
+from django.db.models import Case, DateField, DateTimeField, F, IntegerField, Value, When
+from django.db.models.fields.json import KeyTextTransform
 from django.template import Context, Template
 from django.urls import reverse
 from django.utils.dateparse import parse_date
@@ -20,6 +21,7 @@ from django_tables2.utils import Accessor
 from extras.choices import CustomFieldTypeChoices
 from utilities.object_types import object_type_identifier, object_type_name
 from utilities.permissions import get_permission_for_model
+from utilities.request import get_safe_request_context
 from utilities.templatetags.builtins.filters import render_markdown
 from utilities.views import get_action_url
 
@@ -249,6 +251,9 @@ class ActionsColumn(tables.Column):
         direct button link and icon (default: True)
     """
     attrs = {
+        'th': {
+            'aria-label': _('Actions'),
+        },
         'td': {
             'class': 'text-end text-nowrap noprint p-1'
         }
@@ -523,6 +528,28 @@ class CustomFieldColumn(tables.Column):
 
         super().__init__(*args, **kwargs)
 
+    def order(self, queryset, is_descending):
+        # Order by the underlying JSON value, honoring the custom field's null placement preference.
+        # A missing key or a JSON null value is extracted as SQL NULL via the ->> (text) operator,
+        # whereas the -> (JSONB) operator used for value ordering treats JSON null as a sortable value.
+        # We therefore annotate an explicit rank to control null placement independently of JSONB sorting.
+        name = self.customfield.name
+        text_value = f'_cf_{name}_text'
+        null_rank = f'_cf_{name}_nullrank'
+        null_sort, value_sort = (0, 1) if self.customfield.nulls_first else (1, 0)
+        queryset = queryset.annotate(**{
+            text_value: KeyTextTransform(name, 'custom_field_data'),
+        }).annotate(**{
+            null_rank: Case(
+                When(**{f'{text_value}__isnull': True}, then=Value(null_sort)),
+                default=Value(value_sort),
+                output_field=IntegerField(),
+            ),
+        })
+        value = F(f'custom_field_data__{name}')
+        ordering = (null_rank, value.desc() if is_descending else value.asc())
+        return queryset.order_by(*ordering), True
+
     @staticmethod
     def _linkify_item(item):
         if hasattr(item, 'get_absolute_url'):
@@ -579,9 +606,9 @@ class CustomLinkColumn(tables.Column):
             'debug': settings.DEBUG,
         }
         if request := getattr(table, 'context', {}).get('request'):
-            # If the request is available, include it as context
+            # If the request is available, include a sanitized subset of it as context
             context.update({
-                'request': request,
+                'request': get_safe_request_context(request),
                 **auth(request),
             })
 

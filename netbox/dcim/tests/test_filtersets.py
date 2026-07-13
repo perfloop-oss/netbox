@@ -1385,6 +1385,7 @@ class DeviceTypeTestCase(TestCase, ChangeLoggedFilterSetTests):
                 rear_image='rear.png',
                 weight=10,
                 weight_unit=WeightUnitChoices.UNIT_POUND,
+                end_of_life='2030-01-01',
                 description='foobar1'
             ),
             DeviceType(
@@ -1399,6 +1400,7 @@ class DeviceTypeTestCase(TestCase, ChangeLoggedFilterSetTests):
                 airflow=DeviceAirflowChoices.AIRFLOW_FRONT_TO_REAR,
                 weight=20,
                 weight_unit=WeightUnitChoices.UNIT_POUND,
+                end_of_life='2035-06-30',
                 description='foobar2'
             ),
             DeviceType(
@@ -1479,6 +1481,14 @@ class DeviceTypeTestCase(TestCase, ChangeLoggedFilterSetTests):
     def test_part_number(self):
         params = {'part_number': ['Part Number 1', 'Part Number 2']}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_end_of_life(self):
+        params = {'end_of_life': ['2030-01-01', '2035-06-30']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+        params = {'end_of_life__gte': ['2031-01-01']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+        params = {'end_of_life__lte': ['2031-01-01']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
 
     def test_description(self):
         params = {'description': ['foobar1', 'foobar2']}
@@ -1640,6 +1650,7 @@ class ModuleTypeTestCase(TestCase, ChangeLoggedFilterSetTests):
                 description='foobar1',
                 airflow=ModuleAirflowChoices.FRONT_TO_REAR,
                 cooling_method=CoolingMethodChoices.METHOD_LIQUID,
+                end_of_life='2030-01-01',
                 profile=module_type_profiles[0],
                 attribute_data={
                     'string': 'string1',
@@ -1657,6 +1668,7 @@ class ModuleTypeTestCase(TestCase, ChangeLoggedFilterSetTests):
                 description='foobar2',
                 airflow=ModuleAirflowChoices.REAR_TO_FRONT,
                 cooling_method=CoolingMethodChoices.METHOD_HYBRID,
+                end_of_life='2035-06-30',
                 profile=module_type_profiles[1],
                 attribute_data={
                     'string': 'string2',
@@ -1738,6 +1750,14 @@ class ModuleTypeTestCase(TestCase, ChangeLoggedFilterSetTests):
     def test_description(self):
         params = {'description': ['foobar1', 'foobar2']}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+
+    def test_end_of_life(self):
+        params = {'end_of_life': ['2030-01-01', '2035-06-30']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 2)
+        params = {'end_of_life__gte': ['2031-01-01']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+        params = {'end_of_life__lte': ['2031-01-01']}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
 
     def test_manufacturer(self):
         manufacturers = Manufacturer.objects.all()[:2]

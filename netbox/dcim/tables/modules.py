@@ -75,6 +75,7 @@ class ModuleTypeTable(PrimaryModelTable):
         model = ModuleType
         fields = (
             'pk', 'id', 'model', 'profile', 'manufacturer', 'part_number', 'airflow', 'cooling_method', 'weight',
+            'end_of_life',
             'description', 'attributes', 'module_count', 'comments', 'tags', 'created', 'last_updated',
         )
         default_columns = (

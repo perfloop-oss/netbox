@@ -21,6 +21,7 @@ from tenancy.models import Tenant
 from users.models import User
 from utilities.forms import BulkEditForm, add_blank_choice, form_from_model
 from utilities.forms.fields import (
+    ChoiceField,
     ColorField,
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
@@ -28,7 +29,7 @@ from utilities.forms.fields import (
     PositiveBigIntegerField,
 )
 from utilities.forms.rendering import FieldSet, InlineFields, TabbedGroups
-from utilities.forms.widgets import BulkEditNullBooleanSelect, NumberWithOptions
+from utilities.forms.widgets import BulkEditNullBooleanSelect, DatePicker, NumberWithOptions
 from virtualization.models import Cluster
 from wireless.choices import WirelessRoleChoices
 from wireless.models import WirelessLAN, WirelessLANGroup
@@ -117,7 +118,7 @@ class SiteGroupBulkEditForm(NestedGroupModelBulkEditForm):
 
 
 class SiteBulkEditForm(PrimaryModelBulkEditForm):
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         choices=add_blank_choice(SiteStatusChoices),
         required=False,
@@ -191,7 +192,7 @@ class LocationBulkEditForm(NestedGroupModelBulkEditForm):
             'site_id': '$site'
         }
     )
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         choices=add_blank_choice(LocationStatusChoices),
         required=False,
@@ -242,12 +243,12 @@ class RackTypeBulkEditForm(PrimaryModelBulkEditForm):
         queryset=Manufacturer.objects.all(),
         required=False
     )
-    form_factor = forms.ChoiceField(
+    form_factor = ChoiceField(
         label=_('Form factor'),
         choices=add_blank_choice(RackFormFactorChoices),
         required=False
     )
-    width = forms.ChoiceField(
+    width = ChoiceField(
         label=_('Width'),
         choices=add_blank_choice(RackWidthChoices),
         required=False
@@ -280,7 +281,7 @@ class RackTypeBulkEditForm(PrimaryModelBulkEditForm):
         required=False,
         min_value=1
     )
-    outer_unit = forms.ChoiceField(
+    outer_unit = ChoiceField(
         label=_('Outer unit'),
         choices=add_blank_choice(RackDimensionUnitChoices),
         required=False
@@ -300,7 +301,7 @@ class RackTypeBulkEditForm(PrimaryModelBulkEditForm):
         min_value=0,
         required=False
     )
-    weight_unit = forms.ChoiceField(
+    weight_unit = ChoiceField(
         label=_('Weight unit'),
         choices=add_blank_choice(WeightUnitChoices),
         required=False,
@@ -379,7 +380,7 @@ class RackBulkEditForm(PrimaryModelBulkEditForm):
         queryset=Tenant.objects.all(),
         required=False
     )
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         choices=add_blank_choice(RackStatusChoices),
         required=False,
@@ -405,12 +406,12 @@ class RackBulkEditForm(PrimaryModelBulkEditForm):
         max_length=50,
         required=False
     )
-    form_factor = forms.ChoiceField(
+    form_factor = ChoiceField(
         label=_('Form factor'),
         choices=add_blank_choice(RackFormFactorChoices),
         required=False
     )
-    width = forms.ChoiceField(
+    width = ChoiceField(
         label=_('Width'),
         choices=add_blank_choice(RackWidthChoices),
         required=False
@@ -439,7 +440,7 @@ class RackBulkEditForm(PrimaryModelBulkEditForm):
         required=False,
         min_value=1
     )
-    outer_unit = forms.ChoiceField(
+    outer_unit = ChoiceField(
         label=_('Outer unit'),
         choices=add_blank_choice(RackDimensionUnitChoices),
         required=False
@@ -449,7 +450,7 @@ class RackBulkEditForm(PrimaryModelBulkEditForm):
         required=False,
         min_value=1
     )
-    airflow = forms.ChoiceField(
+    airflow = ChoiceField(
         label=_('Airflow'),
         choices=add_blank_choice(RackAirflowChoices),
         required=False
@@ -479,7 +480,7 @@ class RackBulkEditForm(PrimaryModelBulkEditForm):
         min_value=0,
         required=False
     )
-    weight_unit = forms.ChoiceField(
+    weight_unit = ChoiceField(
         label=_('Weight unit'),
         choices=add_blank_choice(WeightUnitChoices),
         required=False,
@@ -505,7 +506,7 @@ class RackBulkEditForm(PrimaryModelBulkEditForm):
 
 
 class RackReservationBulkEditForm(PrimaryModelBulkEditForm):
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         choices=add_blank_choice(RackReservationStatusChoices),
         required=False,
@@ -567,7 +568,7 @@ class DeviceTypeBulkEditForm(PrimaryModelBulkEditForm):
         widget=BulkEditNullBooleanSelect(),
         label=_('Exclude from utilization')
     )
-    airflow = forms.ChoiceField(
+    airflow = ChoiceField(
         label=_('Airflow'),
         choices=add_blank_choice(DeviceAirflowChoices),
         required=False
@@ -582,11 +583,16 @@ class DeviceTypeBulkEditForm(PrimaryModelBulkEditForm):
         min_value=0,
         required=False
     )
-    weight_unit = forms.ChoiceField(
+    weight_unit = ChoiceField(
         label=_('Weight unit'),
         choices=add_blank_choice(WeightUnitChoices),
         required=False,
         initial=''
+    )
+    end_of_life = forms.DateField(
+        label=_('End of life'),
+        required=False,
+        widget=DatePicker()
     )
 
     model = DeviceType
@@ -596,8 +602,11 @@ class DeviceTypeBulkEditForm(PrimaryModelBulkEditForm):
             'airflow', 'cooling_method', 'description', name=_('Device Type')
         ),
         FieldSet('weight', 'weight_unit', name=_('Weight')),
+        FieldSet('end_of_life', name=_('Lifecycle')),
     )
-    nullable_fields = ('part_number', 'airflow', 'cooling_method', 'weight', 'weight_unit', 'description', 'comments')
+    nullable_fields = (
+        'part_number', 'airflow', 'cooling_method', 'weight', 'weight_unit', 'end_of_life', 'description', 'comments',
+    )
 
 
 class ModuleTypeProfileBulkEditForm(PrimaryModelBulkEditForm):
@@ -628,7 +637,7 @@ class ModuleTypeBulkEditForm(PrimaryModelBulkEditForm):
         label=_('Part number'),
         required=False
     )
-    airflow = forms.ChoiceField(
+    airflow = ChoiceField(
         label=_('Airflow'),
         choices=add_blank_choice(ModuleAirflowChoices),
         required=False
@@ -643,11 +652,16 @@ class ModuleTypeBulkEditForm(PrimaryModelBulkEditForm):
         min_value=0,
         required=False
     )
-    weight_unit = forms.ChoiceField(
+    weight_unit = ChoiceField(
         label=_('Weight unit'),
         choices=add_blank_choice(WeightUnitChoices),
         required=False,
         initial=''
+    )
+    end_of_life = forms.DateField(
+        label=_('End of life'),
+        required=False,
+        widget=DatePicker()
     )
 
     model = ModuleType
@@ -658,9 +672,10 @@ class ModuleTypeBulkEditForm(PrimaryModelBulkEditForm):
             name=_('Chassis')
         ),
         FieldSet('cooling_method', 'airflow', name=_('Cooling')),
+        FieldSet('end_of_life', name=_('Lifecycle')),
     )
     nullable_fields = (
-        'part_number', 'weight', 'weight_unit', 'profile', 'description', 'comments', 'cooling_method',
+        'part_number', 'weight', 'weight_unit', 'profile', 'end_of_life', 'description', 'comments', 'cooling_method',
     )
 
 
@@ -761,12 +776,12 @@ class DeviceBulkEditForm(PrimaryModelBulkEditForm):
         queryset=Platform.objects.all(),
         required=False
     )
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         choices=add_blank_choice(DeviceStatusChoices),
         required=False
     )
-    airflow = forms.ChoiceField(
+    airflow = ChoiceField(
         label=_('Airflow'),
         choices=add_blank_choice(DeviceAirflowChoices),
         required=False
@@ -825,7 +840,7 @@ class ModuleBulkEditForm(PrimaryModelBulkEditForm):
             'parent': 'manufacturer',
         }
     )
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         choices=add_blank_choice(ModuleStatusChoices),
         required=False,
@@ -863,19 +878,19 @@ class CableBundleBulkEditForm(PrimaryModelBulkEditForm):
 
 
 class CableBulkEditForm(PrimaryModelBulkEditForm):
-    type = forms.ChoiceField(
+    type = ChoiceField(
         label=_('Type'),
         choices=add_blank_choice(CableTypeChoices),
         required=False,
         initial=''
     )
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         choices=add_blank_choice(LinkStatusChoices),
         required=False,
         initial=''
     )
-    profile = forms.ChoiceField(
+    profile = ChoiceField(
         label=_('Profile'),
         choices=add_blank_choice(CableProfileChoices),
         required=False,
@@ -905,7 +920,7 @@ class CableBulkEditForm(PrimaryModelBulkEditForm):
         min_value=0,
         required=False
     )
-    length_unit = forms.ChoiceField(
+    length_unit = ChoiceField(
         label=_('Length unit'),
         choices=add_blank_choice(CableLengthUnitChoices),
         required=False,
@@ -989,25 +1004,25 @@ class PowerFeedBulkEditForm(PrimaryModelBulkEditForm):
         queryset=Rack.objects.all(),
         required=False,
     )
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         choices=add_blank_choice(PowerFeedStatusChoices),
         required=False,
         initial=''
     )
-    type = forms.ChoiceField(
+    type = ChoiceField(
         label=_('Type'),
         choices=add_blank_choice(PowerFeedTypeChoices),
         required=False,
         initial=''
     )
-    supply = forms.ChoiceField(
+    supply = ChoiceField(
         label=_('Supply'),
         choices=add_blank_choice(PowerFeedSupplyChoices),
         required=False,
         initial=''
     )
-    phase = forms.ChoiceField(
+    phase = ChoiceField(
         label=_('Phase'),
         choices=add_blank_choice(PowerFeedPhaseChoices),
         required=False,
@@ -1235,7 +1250,7 @@ class ConsolePortTemplateBulkEditForm(ComponentTemplateBulkEditForm):
         max_length=64,
         required=False
     )
-    type = forms.ChoiceField(
+    type = ChoiceField(
         label=_('Type'),
         choices=add_blank_choice(ConsolePortTypeChoices),
         required=False
@@ -1254,7 +1269,7 @@ class ConsoleServerPortTemplateBulkEditForm(ComponentTemplateBulkEditForm):
         max_length=64,
         required=False
     )
-    type = forms.ChoiceField(
+    type = ChoiceField(
         label=_('Type'),
         choices=add_blank_choice(ConsolePortTypeChoices),
         required=False
@@ -1277,7 +1292,7 @@ class PowerPortTemplateBulkEditForm(ComponentTemplateBulkEditForm):
         max_length=64,
         required=False
     )
-    type = forms.ChoiceField(
+    type = ChoiceField(
         label=_('Type'),
         choices=add_blank_choice(PowerPortTypeChoices),
         required=False
@@ -1319,7 +1334,7 @@ class PowerOutletTemplateBulkEditForm(ComponentTemplateBulkEditForm):
         max_length=64,
         required=False
     )
-    type = forms.ChoiceField(
+    type = ChoiceField(
         label=_('Type'),
         choices=add_blank_choice(PowerOutletTypeChoices),
         required=False
@@ -1333,7 +1348,7 @@ class PowerOutletTemplateBulkEditForm(ComponentTemplateBulkEditForm):
         queryset=PowerPortTemplate.objects.all(),
         required=False
     )
-    feed_leg = forms.ChoiceField(
+    feed_leg = ChoiceField(
         label=_('Feed leg'),
         choices=add_blank_choice(PowerOutletFeedLegChoices),
         required=False
@@ -1503,7 +1518,7 @@ class InterfaceTemplateBulkEditForm(ComponentTemplateBulkEditForm):
         max_length=64,
         required=False
     )
-    type = forms.ChoiceField(
+    type = ChoiceField(
         label=_('Type'),
         choices=add_blank_choice(InterfaceTypeChoices),
         required=False
@@ -1522,19 +1537,19 @@ class InterfaceTemplateBulkEditForm(ComponentTemplateBulkEditForm):
         label=_('Description'),
         required=False
     )
-    poe_mode = forms.ChoiceField(
+    poe_mode = ChoiceField(
         choices=add_blank_choice(InterfacePoEModeChoices),
         required=False,
         initial='',
         label=_('PoE mode')
     )
-    poe_type = forms.ChoiceField(
+    poe_type = ChoiceField(
         choices=add_blank_choice(InterfacePoETypeChoices),
         required=False,
         initial='',
         label=_('PoE type')
     )
-    rf_role = forms.ChoiceField(
+    rf_role = ChoiceField(
         choices=add_blank_choice(WirelessRoleChoices),
         required=False,
         initial='',
@@ -1554,7 +1569,7 @@ class FrontPortTemplateBulkEditForm(ComponentTemplateBulkEditForm):
         max_length=64,
         required=False
     )
-    type = forms.ChoiceField(
+    type = ChoiceField(
         label=_('Type'),
         choices=add_blank_choice(PortTypeChoices),
         required=False
@@ -1581,7 +1596,7 @@ class RearPortTemplateBulkEditForm(ComponentTemplateBulkEditForm):
         max_length=64,
         required=False
     )
-    type = forms.ChoiceField(
+    type = ChoiceField(
         label=_('Type'),
         choices=add_blank_choice(PortTypeChoices),
         required=False
@@ -1924,13 +1939,13 @@ class InterfaceBulkEditForm(
         widget=BulkEditNullBooleanSelect,
         label=_('Management only')
     )
-    poe_mode = forms.ChoiceField(
+    poe_mode = ChoiceField(
         choices=add_blank_choice(InterfacePoEModeChoices),
         required=False,
         initial='',
         label=_('PoE mode')
     )
-    poe_type = forms.ChoiceField(
+    poe_type = ChoiceField(
         choices=add_blank_choice(InterfacePoETypeChoices),
         required=False,
         initial='',
@@ -1941,7 +1956,7 @@ class InterfaceBulkEditForm(
         required=False,
         widget=BulkEditNullBooleanSelect
     )
-    mode = forms.ChoiceField(
+    mode = ChoiceField(
         label=_('Mode'),
         choices=add_blank_choice(InterfaceModeChoices),
         required=False,
@@ -2179,7 +2194,7 @@ class InventoryItemBulkEditForm(
         queryset=Manufacturer.objects.all(),
         required=False
     )
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         choices=add_blank_choice(InventoryItemStatusChoices),
         required=False,
@@ -2223,7 +2238,7 @@ class VirtualDeviceContextBulkEditForm(PrimaryModelBulkEditForm):
         queryset=Device.objects.all(),
         required=False
     )
-    status = forms.ChoiceField(
+    status = ChoiceField(
         label=_('Status'),
         required=False,
         choices=add_blank_choice(VirtualDeviceContextStatusChoices)

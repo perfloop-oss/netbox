@@ -65,6 +65,10 @@ The default cooling method employed by devices of this type (air, liquid, hybrid
 
 The numeric weight of the device, including a unit designation (e.g. 10 kilograms or 20 pounds).
 
+### End of Life
+
+The date after which this device type is no longer supported by its manufacturer. This can be used to identify devices approaching or past their support horizon to aid in hardware lifecycle planning.
+
 ### Front & Rear Images
 
 Users can upload illustrations of the device's front and rear panels. If present, these will be used to render the device in [rack](./rack.md) elevation diagrams.

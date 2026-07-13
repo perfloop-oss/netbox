@@ -2,7 +2,7 @@
     "openapi": "3.0.3",
     "info": {
         "title": "NetBox REST API",
-        "version": "4.6.3",
+        "version": "4.6.4",
         "license": {
             "name": "Apache v2 License"
         }
@@ -28336,7 +28336,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28356,7 +28356,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28369,7 +28369,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28382,7 +28382,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28395,7 +28395,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28408,7 +28408,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28421,7 +28421,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28434,7 +28434,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28447,7 +28447,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28460,7 +28460,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28473,7 +28473,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -28486,7 +28486,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             }
                         },
                         "explode": true,
@@ -142067,6 +142067,91 @@
                     },
                     {
                         "in": "query",
+                        "name": "image_size",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        },
+                        "explode": true,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "image_size__empty",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "image_size__gt",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        },
+                        "explode": true,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "image_size__gte",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        },
+                        "explode": true,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "image_size__lt",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        },
+                        "explode": true,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "image_size__lte",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        },
+                        "explode": true,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
+                        "name": "image_size__n",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        },
+                        "explode": true,
+                        "style": "form"
+                    },
+                    {
+                        "in": "query",
                         "name": "image_width",
                         "schema": {
                             "type": "array",
@@ -239039,6 +239124,12 @@
                         },
                         "readOnly": true
                     },
+                    "dns_name": {
+                        "type": "string",
+                        "description": "Hostname or FQDN (not case-sensitive)",
+                        "pattern": "^([0-9A-Za-z_-]+|\\*)(\\.[0-9A-Za-z_-]+)*\\.?$",
+                        "maxLength": 255
+                    },
                     "description": {
                         "type": "string",
                         "maxLength": 200
@@ -239068,6 +239159,12 @@
                             }
                         ],
                         "nullable": true
+                    },
+                    "dns_name": {
+                        "type": "string",
+                        "description": "Hostname or FQDN (not case-sensitive)",
+                        "pattern": "^([0-9A-Za-z_-]+|\\*)(\\.[0-9A-Za-z_-]+)*\\.?$",
+                        "maxLength": 255
                     },
                     "description": {
                         "type": "string",
@@ -242685,11 +242782,12 @@
                             "breakout-1c2p-2c1p",
                             "breakout-1c4p-4c1p",
                             "breakout-1c6p-6c1p",
+                            "breakout-1c8p-8c1p",
                             "breakout-2c4p-8c1p-shuffle"
                         ],
                         "type": "string",
-                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
-                        "x-spec-enum-id": "f566e6df6572f5d0"
+                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-1c8p-8c1p` - 1C8P:8C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
+                        "x-spec-enum-id": "6a5f5cb8eec72982"
                     },
                     "tenant": {
                         "oneOf": [
@@ -255569,11 +255667,12 @@
                                     "breakout-1c2p-2c1p",
                                     "breakout-1c4p-4c1p",
                                     "breakout-1c6p-6c1p",
+                                    "breakout-1c8p-8c1p",
                                     "breakout-2c4p-8c1p-shuffle"
                                 ],
                                 "type": "string",
-                                "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
-                                "x-spec-enum-id": "f566e6df6572f5d0"
+                                "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-1c8p-8c1p` - 1C8P:8C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
+                                "x-spec-enum-id": "6a5f5cb8eec72982"
                             },
                             "label": {
                                 "type": "string",
@@ -255602,6 +255701,7 @@
                                     "1C2P:2C1P breakout",
                                     "1C4P:4C1P breakout",
                                     "1C6P:6C1P breakout",
+                                    "1C8P:8C1P breakout",
                                     "2C4P:8C1P breakout (shuffle)"
                                 ]
                             }
@@ -255942,11 +256042,12 @@
                             "breakout-1c2p-2c1p",
                             "breakout-1c4p-4c1p",
                             "breakout-1c6p-6c1p",
+                            "breakout-1c8p-8c1p",
                             "breakout-2c4p-8c1p-shuffle"
                         ],
                         "type": "string",
-                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
-                        "x-spec-enum-id": "f566e6df6572f5d0"
+                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-1c8p-8c1p` - 1C8P:8C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
+                        "x-spec-enum-id": "6a5f5cb8eec72982"
                     },
                     "tenant": {
                         "oneOf": [
@@ -267300,6 +267401,10 @@
                         "type": "integer",
                         "readOnly": true
                     },
+                    "image_size": {
+                        "type": "integer",
+                        "readOnly": true
+                    },
                     "created": {
                         "type": "string",
                         "format": "date-time",
@@ -267319,6 +267424,7 @@
                     "id",
                     "image",
                     "image_height",
+                    "image_size",
                     "image_width",
                     "last_updated",
                     "object_id",
@@ -280060,11 +280166,12 @@
                             "breakout-1c2p-2c1p",
                             "breakout-1c4p-4c1p",
                             "breakout-1c6p-6c1p",
+                            "breakout-1c8p-8c1p",
                             "breakout-2c4p-8c1p-shuffle"
                         ],
                         "type": "string",
-                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
-                        "x-spec-enum-id": "f566e6df6572f5d0"
+                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-1c8p-8c1p` - 1C8P:8C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
+                        "x-spec-enum-id": "6a5f5cb8eec72982"
                     },
                     "tenant": {
                         "oneOf": [
@@ -296041,12 +296148,13 @@
                             "breakout-1c2p-2c1p",
                             "breakout-1c4p-4c1p",
                             "breakout-1c6p-6c1p",
+                            "breakout-1c8p-8c1p",
                             "breakout-2c4p-8c1p-shuffle",
                             ""
                         ],
                         "type": "string",
-                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
-                        "x-spec-enum-id": "f566e6df6572f5d0"
+                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-1c8p-8c1p` - 1C8P:8C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
+                        "x-spec-enum-id": "6a5f5cb8eec72982"
                     },
                     "tenant": {
                         "oneOf": [
@@ -319149,12 +319257,13 @@
                             "breakout-1c2p-2c1p",
                             "breakout-1c4p-4c1p",
                             "breakout-1c6p-6c1p",
+                            "breakout-1c8p-8c1p",
                             "breakout-2c4p-8c1p-shuffle",
                             ""
                         ],
                         "type": "string",
-                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
-                        "x-spec-enum-id": "f566e6df6572f5d0"
+                        "description": "* `single-1c1p` - 1C1P\n* `single-1c2p` - 1C2P\n* `single-1c4p` - 1C4P\n* `single-1c6p` - 1C6P\n* `single-1c8p` - 1C8P\n* `single-1c12p` - 1C12P\n* `single-1c16p` - 1C16P\n* `trunk-2c1p` - 2C1P trunk\n* `trunk-2c2p` - 2C2P trunk\n* `trunk-2c4p` - 2C4P trunk\n* `trunk-2c4p-shuffle` - 2C4P trunk (shuffle)\n* `trunk-2c6p` - 2C6P trunk\n* `trunk-2c8p` - 2C8P trunk\n* `trunk-2c12p` - 2C12P trunk\n* `trunk-4c1p` - 4C1P trunk\n* `trunk-4c2p` - 4C2P trunk\n* `trunk-4c4p` - 4C4P trunk\n* `trunk-4c4p-shuffle` - 4C4P trunk (shuffle)\n* `trunk-4c6p` - 4C6P trunk\n* `trunk-4c8p` - 4C8P trunk\n* `trunk-8c4p` - 8C4P trunk\n* `breakout-1c2p-2c1p` - 1C2P:2C1P breakout\n* `breakout-1c4p-4c1p` - 1C4P:4C1P breakout\n* `breakout-1c6p-6c1p` - 1C6P:6C1P breakout\n* `breakout-1c8p-8c1p` - 1C8P:8C1P breakout\n* `breakout-2c4p-8c1p-shuffle` - 2C4P:8C1P breakout (shuffle)",
+                        "x-spec-enum-id": "6a5f5cb8eec72982"
                     },
                     "tenant": {
                         "oneOf": [
